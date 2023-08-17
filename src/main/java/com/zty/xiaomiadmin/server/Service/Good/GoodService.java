@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface GoodService {
+    List<good> getGoodName() throws IOException;
 
     GoodResult getGood(int pageIndex, int pageSize,String goodname) throws IOException;
 

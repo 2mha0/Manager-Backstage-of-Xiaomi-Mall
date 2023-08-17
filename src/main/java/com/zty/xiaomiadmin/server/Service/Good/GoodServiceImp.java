@@ -3,10 +3,6 @@ package com.zty.xiaomiadmin.server.Service.Good;
 import com.zty.xiaomiadmin.server.Dao.Good;
 import com.zty.xiaomiadmin.server.Entity.Good.*;
 import com.zty.xiaomiadmin.server.utils.SqlSessionUtil;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,6 +16,12 @@ import java.util.List;
 public class GoodServiceImp implements GoodService {
 
 
+    @Override
+    public List<good> getGoodName() throws IOException {
+        GoodResult goodResult = new GoodResult();
+        goodResult.setStatus(200);
+        return SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).getGoodName();
+    }
 
     @Override
     public GoodResult getGood(int pageIndex, int pageSize,String goodname) throws IOException {
@@ -46,14 +48,14 @@ public class GoodServiceImp implements GoodService {
         goodresult.setList(good);
         int num =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodPicCount();
+                        getMapper(Good.class).getGoodPicCount();
         int currnum=
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodCurrCount(category);
+                        getMapper(Good.class).getGoodCurrCount(category);
         goodresult.setPageTotal(num);
         goodresult.setCurrTotal(currnum);
 
@@ -67,15 +69,15 @@ getMapper(Good.class).getGoodCurrCount(category);
 
         List<good> goodByName =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodsByName("%"+ goodname + "%");
+                        getMapper(Good.class).getGoodsByName("%"+ goodname + "%");
         int num = goodByName.size();
         int allnum =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodPicCount();
+                        getMapper(Good.class).getGoodPicCount();
         goodResult.setPageTotal(allnum);
         goodResult.setCurrTotal(num);
         goodResult.setList(goodByName);
@@ -86,32 +88,32 @@ getMapper(Good.class).getGoodPicCount();
 
         int finaid =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodPicCount();
-
-
-
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
-
-getMapper(Good.class).delGood(good.getGood_id());
+                        getMapper(Good.class).getGoodPicCount();
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+        SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+
+                getMapper(Good.class).delGood(good.getGood_id());
+
+
+        SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+
+                commit();
 
         for(int i=good.getGood_id()+1;i<=finaid;i++){
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).updateGoodID(i,i-1);
+                    getMapper(Good.class).updateGoodID(i,i-1);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                    commit();
         }
 
 
@@ -123,9 +125,9 @@ commit();
 
         int finaid =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodPicCount();
+                        getMapper(Good.class).getGoodPicCount();
 
         int[] goodslen = new int[goods.size()];
         int i=0;
@@ -140,41 +142,41 @@ getMapper(Good.class).getGoodPicCount();
         //删除第一个
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+        SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).delGood(goodslen[j]);
+                getMapper(Good.class).delGood(goodslen[j]);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+        SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                commit();
 
         for(i=starid+1;i<=finaid;i++){
 
             if((j+1<goodslen.length) && i==goodslen[j+1]){
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).delGood(i);
+                        getMapper(Good.class).delGood(i);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                        commit();
                 delnum++;
                 j++;
             }
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).updateGoodID(i,i-delnum);
+                    getMapper(Good.class).updateGoodID(i,i-delnum);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                    commit();
         }
     }
 
@@ -184,9 +186,9 @@ commit();
         GoodPushResult goodPushResult = new GoodPushResult();
         good goodByName =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodByName(good.getName().trim());
+                        getMapper(Good.class).getGoodByName(good.getName().trim());
         if(goodByName!=null){
             //已存在商品
             goodPushResult.setStatus(400);
@@ -196,46 +198,46 @@ getMapper(Good.class).getGoodByName(good.getName().trim());
             goodPushResult.setStatus(200);
             List<good> goods =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                    SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGood(good.getCategory_id());
+                            getMapper(Good.class).getGood(good.getCategory_id());
             int finaid = goods.get(goods.size()-1).getGood_id();
             int starid = finaid + 1;
             int goodidlast =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                    SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodPicCount();
+                            getMapper(Good.class).getGoodPicCount();
 
             for(int i=goodidlast;i>=starid;i--){
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).updateGoodID(i,i+1);
+                        getMapper(Good.class).updateGoodID(i,i+1);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                        commit();
             }
             String createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).insertGood(starid,good.getName(),createTime,good.getCategory_id());
+                    getMapper(Good.class).insertGood(starid,good.getName(),createTime,good.getCategory_id());
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                    commit();
 
             good newgoodbyname =
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+                    SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).getGoodByName(good.getName());
+                            getMapper(Good.class).getGoodByName(good.getName());
             goodPushResult.setGood(newgoodbyname);
 
 
@@ -257,14 +259,14 @@ getMapper(Good.class).getGoodByName(good.getName());
             System.out.println(newhot);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-getMapper(Good.class).updGood(goodid, goodname, newhot);
+                    getMapper(Good.class).updGood(goodid, goodname, newhot);
 
 
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().
 
-commit();
+                    commit();
             goodResult.setStatus(200);
         }
         return goodResult;
@@ -302,16 +304,16 @@ commit();
     @Override
     public void updGoodPic(int id, String img, int kind) throws IOException {
         if (kind == 1) {
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).setPic1(id, img);
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().commit();
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).setPic1(id, img);
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().commit();
         }
         else if(kind == 2){
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).setPic2(id, img);
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().commit();
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).setPic2(id, img);
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().commit();
         }
         else {
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).setPic3(id, img);
-SqlSessionUtil.getSqlSessionInstance().getSqlSession().commit();
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().getMapper(Good.class).setPic3(id, img);
+            SqlSessionUtil.getSqlSessionInstance().getSqlSession().commit();
         }
     }
 }

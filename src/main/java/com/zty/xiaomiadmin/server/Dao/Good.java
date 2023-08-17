@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 public interface Good {
+    @Select("select good_id,name,category_id from goods")
+    List<good> getGoodName();
 
     @Select("select good_id,name,pushtime,category_id,newhot from goods where category_id = #{pageIndex} order by good_id")
     List<good> getGood(int pageIndex);
@@ -49,7 +51,7 @@ public interface Good {
 
     @Select("select count(*) from goods ")
     int getGoodPicCount();
-//
+    //
     @Update("update goods set icon = #{img} where good_id = #{id}")
     void setPic1(int id,String img);
 
